@@ -57,6 +57,7 @@ angular.module('dibari.angular-ellipsis', [])
 				ngShow: '=',
 				ngBind: '=',
 				ngBindHtml: '=',
+				isOverflowed: '=?',
 				ellipsisAppend: '@',
 				ellipsisAppendClick: '&',
 				ellipsisSymbol: '@',
@@ -77,6 +78,7 @@ angular.module('dibari.angular-ellipsis', [])
 					attributes.lastWindowTimeoutEvent = null;
 					/* State Variables */
 					attributes.isTruncated = false;
+					scope.isOverflowed = false;
 
 					function _isDefined(value) {
 						return typeof(value) !== 'undefined';
@@ -136,9 +138,9 @@ angular.module('dibari.angular-ellipsis', [])
 								// And now for the party trick
 								element[0].style.maxHeight = (lineHeight * scope.ellipsisMaxLines) + 'px';
 							}
-
+							scope.isOverflowed = isOverflowed(element, useParent);
 							// When the text has overflow
-							if (isOverflowed(element, useParent)) {
+							if (scope.isOverflowed) {
 								// Set data-overflow on element for targeting
 								element.attr('data-overflowed', 'true');
 
@@ -208,6 +210,7 @@ angular.module('dibari.angular-ellipsis', [])
 								element.attr('data-overflowed', 'false');
 							}
 						}
+
 					}
 
 					function getTextUpToIndex(binding, separatorLocations, index) {
